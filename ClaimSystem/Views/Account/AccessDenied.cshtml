@@ -1,0 +1,136 @@
+﻿@model dynamic
+
+@{
+    ViewData["Title"] = "Access Denied (403)";
+    Layout = null; // Ensure this page doesn't inherit a broken layout
+}
+
+<style>
+    /* --- Shared Theme Variables --- */
+    :root {
+        --primary-gradient: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+        --bg-gradient: linear-gradient(135deg, #4e73df, #1cc88a);
+        --glass-bg: rgba(255, 255, 255, 0.9);
+        --text-dark: #2d3436;
+        --text-muted: #636e72;
+        --danger-color: #e74a3b;
+    }
+
+    /* Set up fullscreen background and centered content */
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-gradient);
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        color: var(--text-dark);
+        text-align: center;
+    }
+
+    /* --- Containers --- */
+    .error-container {
+        width: 100%;
+        max-width: 600px;
+        padding: 40px 20px;
+    }
+
+    .glass-panel {
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 24px;
+        padding: 4rem;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* --- Typography and Status Code --- */
+    .status-code {
+        font-size: 8rem;
+        font-weight: 900;
+        color: var(--danger-color);
+        margin-bottom: 0.5rem;
+        line-height: 1;
+        opacity: 0.8;
+        /* Subtle shadow to make it pop */
+        text-shadow: 0 4px 10px rgba(231, 74, 59, 0.3);
+    }
+
+    h1 {
+        font-weight: 800;
+        color: var(--text-dark);
+        font-size: 2.2rem;
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+
+    .error-message {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+    }
+
+    /* --- Buttons and Links --- */
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 28px;
+        border-radius: 50px;
+        border: none;
+        font-weight: 700;
+        font-size: 1rem;
+        text-decoration: none;
+        color: white;
+        background: var(--primary-gradient);
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(78, 115, 223, 0.4);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(78, 115, 223, 0.5);
+        }
+
+    .contact-link {
+        display: block;
+        margin-top: 1.5rem;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.2s;
+    }
+
+        .contact-link:hover {
+            color: #4e73df;
+        }
+
+</style>
+
+<div class="error-container">
+    <div class="glass-panel">
+        <div class="status-code">403</div>
+        <h1>ACCESS DENIED</h1>
+        <p class="error-message">
+            We're sorry, but you do not have the necessary permissions to view this resource.
+            Please check your account permissions or log in with an authorized user.
+        </p>
+
+        <!-- Home Button -->
+        <a href="/" class="btn-action">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h6m-6 0h-2M9 20h6" />
+            </svg>
+            Go to Home Page
+        </a>
+
+        <!-- Optional Contact Link -->
+        <a href="mailto:support@claimsystem.com" class="contact-link">
+            Need help? Contact Support
+        </a>
+    </div>
+</div>

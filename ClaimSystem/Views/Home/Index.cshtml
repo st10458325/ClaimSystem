@@ -1,0 +1,268 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ClaimSystem.Models.ApplicationUser> SignInManager
+@inject UserManager<ClaimSystem.Models.ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Welcome";
+}
+
+<style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+        --bg-gradient: linear-gradient(135deg, #4e73df, #1cc88a);
+        --glass-bg: rgba(255, 255, 255, 0.95);
+        --text-dark: #2d3436;
+        --text-muted: #636e72;
+        /* Role Colors */
+        --admin-color: #e74a3b;
+        --admin-bg: #fff5f5;
+        --coord-color: #f6c23e;
+        --coord-bg: #fffdf0;
+        --lect-color: #36b9cc;
+        --lect-bg: #f0fbfc;
+    }
+
+    body {
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background: var(--bg-gradient);
+        min-height: 100vh;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-dark);
+    }
+
+    .main-container {
+        width: 100%;
+        max-width: 1000px;
+        padding: 20px;
+    }
+
+    .glass-panel {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 24px;
+        padding: 3rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
+
+    h1 {
+        font-weight: 800;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+        font-size: 2rem;
+        letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        margin-bottom: 3rem;
+    }
+
+    /* Portal Grid System */
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .portal-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        border-radius: 16px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+        background: white;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+        .portal-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Role Specific Styles */
+        .portal-card.admin {
+            border-bottom: 4px solid var(--admin-color);
+        }
+
+            .portal-card.admin .icon-box {
+                background: var(--admin-bg);
+                color: var(--admin-color);
+            }
+
+        .portal-card.coord {
+            border-bottom: 4px solid var(--coord-color);
+        }
+
+            .portal-card.coord .icon-box {
+                background: var(--coord-bg);
+                color: var(--coord-color);
+            }
+
+        .portal-card.lect {
+            border-bottom: 4px solid var(--lect-color);
+        }
+
+            .portal-card.lect .icon-box {
+                background: var(--lect-bg);
+                color: var(--lect-color);
+            }
+
+    /* Icons */
+    .icon-box {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+        transition: transform 0.3s ease;
+    }
+
+    .portal-card:hover .icon-box {
+        transform: scale(1.1);
+    }
+
+    .card-title {
+        font-weight: 700;
+        color: var(--text-dark);
+        font-size: 1.1rem;
+    }
+
+    .card-desc {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-top: 5px;
+    }
+
+    /* Auth Section */
+    .auth-section {
+        border-top: 1px solid #eee;
+        padding-top: 2rem;
+    }
+
+    .user-badge {
+        display: inline-block;
+        background: #f1f3f5;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-top: 1rem;
+        font-weight: 600;
+    }
+
+    .btn-custom {
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-logout {
+        background: #fee2e2;
+        color: #ef4444;
+    }
+
+        .btn-logout:hover {
+            background: #fecaca;
+        }
+
+    .btn-login {
+        background: var(--primary-gradient);
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 4px 15px rgba(78, 115, 223, 0.4);
+    }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(78, 115, 223, 0.6);
+            color: white;
+        }
+
+    /* SVG styling */
+    svg {
+        width: 28px;
+        height: 28px;
+    }
+
+</style>
+
+<div class="main-container">
+    <div class="glass-panel">
+        <h1>Monthly Claim System</h1>
+        <p class="subtitle">Select your user portal to continue</p>
+
+        <div class="portal-grid">
+            <!-- Admin Card -->
+            <a href="/Admin/Index" class="portal-card admin">
+                <div class="icon-box">
+                    <!-- Shield/User Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <span class="card-title">Admin / HR</span>
+                <span class="card-desc">Manage system & users</span>
+            </a>
+
+            <!-- Coordinator Card -->
+            <a href="/Claims/CoordinatorIndex" class="portal-card coord">
+                <div class="icon-box">
+                    <!-- Clipboard/Check Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                </div>
+                <span class="card-title">Coordinator</span>
+                <span class="card-desc">Review & approve claims</span>
+            </a>
+
+            <!-- Lecturer Card -->
+            <a href="/Claims/Create" class="portal-card lect">
+                <div class="icon-box">
+                    <!-- Edit/Pen Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                </div>
+                <span class="card-title">Lecturer</span>
+                <span class="card-desc">Submit new claims</span>
+            </a>
+        </div>
+
+        <div class="auth-section">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <form method="post" asp-controller="Account" asp-action="Logout" style="display:inline;">
+                    <button type="submit" class="btn-custom btn-logout">Sign Out</button>
+                </form>
+                <br />
+                <span class="user-badge">
+                    <svg style="width:14px; height:14px; vertical-align:middle; margin-right:4px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                    @User.Identity.Name
+                </span>
+            }
+            else
+            {
+                <a class="btn-custom btn-login" href="/Account/Login">Login to System</a>
+            }
+        </div>
+    </div>
+</div>

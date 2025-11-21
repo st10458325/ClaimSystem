@@ -1,0 +1,13 @@
+﻿@model IEnumerable<dynamic>
+<h2>HR - Approved Claims Summary</h2>
+<p><a class="btn btn-primary" asp-action="ExportCsv">Export CSV of Approved Claims</a></p>
+@foreach (var item in Model)
+{
+    <h4>@item.Lecturer?.FullName — Total: @item.TotalAmount</h4>
+    <ul>
+        @foreach (var c in item.Claims)
+        {
+            <li>Claim @c.ClaimId - @c.TotalAmount - @c.SubmittedOn</li>
+        }
+    </ul>
+}
